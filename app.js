@@ -1,23 +1,32 @@
 const express = require('express');
+const ejs = require('ejs');
 const path = require('path');
 
 const app = express();
 
-// Statik dosyaların bulunduğu dizini belirtin
+
+//TEMPLATE ENGINE 
+app.set("view engine", "ejs");
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Önceki middleware fonksiyonunu tanımlayın
 const myLogger = function (req, res, next) {
   console.log('LOGGED');
   next();
 };
 
-// Middleware fonksiyonunu uygulayın
 app.use(myLogger);
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'template', 'index.html')); // Dosya yolu doğru bir şekilde belirtilmeli
+  res.render('index');
 });
+app.get('/about', (req, res) => {
+  res.render('about');
+});
+app.get('/add', (req, res) => {
+  res.render('add');
+});
+
 
 const port = 3000;
 app.listen(port, () => {
