@@ -1,11 +1,16 @@
 const express = require('express');
 const ejs = require('ejs');
 const path = require('path');
+const Photo = require('./models/Photo');
+const mongoose = require('mongoose')
+ // Örnek bir dosya yolu, bu dosya yolunu kendi proje yapılandırmanıza göre ayarlayın.
 
 const app = express();
 
 // TEMPLATE ENGINE 
 app.set("view engine", "ejs");
+
+mongoose.connect('mongodb://localhost/pcat-test-db')
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
@@ -16,21 +21,27 @@ const myLogger = function (req, res, next) {
   next();
 };
 
-// Middleware'leri myLogger'dan sonra kullanmalısınız, böylece istek gövdesini işleyebilirsiniz.
 app.use(myLogger);
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
+
+  app.get('/', async (req, res) => {
+    const photos = await Photo.find({})
+    res.render('index',{
+      photos
+    });
+
+  });
+
 app.get('/about', (req, res) => {
   res.render('about');
 });
+
 app.get('/add', (req, res) => {
   res.render('add');
 });
 
-app.post('/photos', (req, res) => {
-  console.log(req.body);
+app.post('/photos', async (req, res) => {
+  await Photo.create(req.body);
   res.redirect('/');
 });
 
