@@ -32,6 +32,13 @@ app.use(myLogger);
 
   });
 
+app.get('/photos/:id', async (req,res) => {
+  const photo = await Photo.findById(req.params.id);
+  res.render('photo', {
+    photo
+  });
+});
+
 app.get('/about', (req, res) => {
   res.render('about');
 });
@@ -39,7 +46,9 @@ app.get('/about', (req, res) => {
 app.get('/add', (req, res) => {
   res.render('add');
 });
-
+app.get('/photo', (req, res) => {
+  res.render('photo');
+});
 app.post('/photos', async (req, res) => {
   await Photo.create(req.body);
   res.redirect('/');
