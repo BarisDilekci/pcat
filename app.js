@@ -18,7 +18,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(fileUpload());
-app.use(methodOverride('_method'));
+app.use(methodOverride('_method', {
+methods: ['POST', 'GET'],
+}));
+
 
 const myLogger = function (req, res, next) {
   console.log("LOGGED");
@@ -85,6 +88,15 @@ app.put('/photos/:id', async (req, res) => {
   photo.save()
 
   res.redirect(`/photos/${req.params.id}`)
+});
+
+app.delete('/photos/:id', async (req, res) => {
+  console.log(req.params.id);
+  const photo = await Photo.findOne({ _id: req.params.id });
+  let deleteImage = __dirname  + '/public' + photo.image;
+  if(fs.existsSync(deleteImage)){ fs.unlinkSync(deleteImage) }
+  await Photo.findByIdAndDelete(req.params.id);
+  res.redirect('/');
 });
 
 const port = 3000;
