@@ -14,7 +14,7 @@ const fs = require("fs");
 const connectDb = async () => {
   try {
     await mongoose.connect(
-      "mongodb://localhost/pcat-test-db",
+      process.env.MONGO_URL || "mongodb://localhost/pcat-test-db",
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -47,7 +47,8 @@ app.get("/about", pageController.getAboutPage);
 app.get("/add", pageController.getAddPage);
 app.get("/edit/:id", pageController.getEditPage);
 
-const port = process.env.port || 3000;
+
+const port = process.env.port || 3001;
 app.listen(port, () => {
   console.log("Project is up");
 });
