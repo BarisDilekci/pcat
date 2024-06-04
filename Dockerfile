@@ -8,7 +8,7 @@ RUN npm install
 
 RUN mkdir -p /app/public/PCATIMAGES
 
-RUN chmod -R 777 /app/public/PCATIMAGES
+RUN chmod -R 400 /app/public/PCATIMAGES
 
 COPY . .
 

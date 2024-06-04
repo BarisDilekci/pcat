@@ -6,7 +6,7 @@ const { query } = require("express");
 exports.getAllPhotos = async (req, res) => {
     const page = req.query.page || 1;
 
-    const photoPerPage = 1;
+    const photoPerPage = 3;
 
     const totalPhotos = await Photo.find().countDocuments();
 
